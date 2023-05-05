@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import plugin.discordintegrationplugin.Discord.DiscordWebhook;
 
 import java.awt.*;
 import java.util.List;
@@ -38,7 +37,7 @@ public class PlayerDeathsEvent implements Listener {
         playerName = playerName.replace("*","").replace(".","");
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
-        //Getting the worlds, webhookUrl and channelId in the configuration
+        //Getting the worlds and channelId in the configuration
         ConfigurationSection worldGroups = plugin.getConfig().getConfigurationSection("worldGroups");
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);

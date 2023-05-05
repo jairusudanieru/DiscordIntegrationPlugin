@@ -39,7 +39,7 @@ public class PlayerAuthMeEvent implements Listener {
         if (joinMessage != null) joinMessage = joinMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
-        //Getting the worlds, webhookUrl and channelId in the configuration
+        //Getting the worlds and channelId in the configuration
         ConfigurationSection worldGroups = plugin.getConfig().getConfigurationSection("worldGroups");
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);

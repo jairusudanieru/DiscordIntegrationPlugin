@@ -53,7 +53,7 @@ public class PlayerAdvancementEvent implements Listener {
         if (list.contains(advancementName)) return;
         String advancement = playerName + " has made the advancement " + advancementName;
 
-        //Getting the worlds, webhookUrl and channelId in the configuration
+        //Getting the worlds and channelId in the configuration
         ConfigurationSection worldGroups = plugin.getConfig().getConfigurationSection("worldGroups");
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);
