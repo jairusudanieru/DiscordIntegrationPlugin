@@ -5,21 +5,21 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
-import plugin.discordintegrationplugin.Configurations.PluginConfig;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class DiscordBot {
 
     public JDA jda;
-    private final PluginConfig config;
-    public DiscordBot(PluginConfig config) {
-        this.config = config;
+    private final JavaPlugin plugin;
+    public DiscordBot(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     public void enableBot() {
         //DiscordBot variables
-        String botToken = this.config.getString("botToken");
+        String botToken = plugin.getConfig().getString("botToken");
         if (botToken == null || botToken.equals("botToken")) return;
-        String activityName = this.config.getString("activityName");
+        String activityName = plugin.getConfig().getString("activityName");
         if (activityName == null) activityName = "Minecraft";
 
         //Enabling the bot
@@ -37,7 +37,7 @@ public class DiscordBot {
 
     public void disableBot() {
         //DiscordBot variables
-        String botToken = this.config.getString("botToken");
+        String botToken = plugin.getConfig().getString("botToken");
         if (botToken == null || botToken.equals("botToken")) return;
 
         //Disabling the bot

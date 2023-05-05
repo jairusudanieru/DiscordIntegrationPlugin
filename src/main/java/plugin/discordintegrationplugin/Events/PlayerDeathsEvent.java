@@ -7,39 +7,35 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import plugin.discordintegrationplugin.Discord.DiscordWebhook;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
-public class PlayerChangeWorldEvent implements Listener {
+public class PlayerDeathsEvent implements Listener {
 
     public JDA jda;
     private final JavaPlugin plugin;
-    public PlayerChangeWorldEvent(JavaPlugin plugin, JDA jda) {
+    public PlayerDeathsEvent(JavaPlugin plugin, JDA jda) {
         this.plugin = plugin;
         this.jda = jda;
     }
 
     @EventHandler
-    public void onChangeWorld(@NotNull PlayerChangedWorldEvent event) {
+    public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
         //Event variables
         Player player = event.getPlayer();
         String playerName = player.getName();
         String playerWorld = player.getWorld().getName();
-        String playerOldWorld = event.getFrom().getName();
-        String joinMessage = plugin.getConfig().getString("joinMessage");
-        String leaveMessage = plugin.getConfig().getString("leaveMessage");
-        String joinHexColor = "#00FF00";
-        String leaveHexColor = "#FF0000";
+        String deathMessage = event.getDeathMessage();
+        String hexColor = "#000000";
 
         //Checking if the player name contains a floodgate prefix
         playerName = playerName.replace("*","").replace(".","");
-        if (joinMessage != null) joinMessage = joinMessage.replace("%player%",playerName);
-        if (leaveMessage != null) leaveMessage = leaveMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
         //Getting the worlds, webhookUrl and channelId in the configuration
@@ -50,34 +46,20 @@ public class PlayerChangeWorldEvent implements Listener {
             String channelId = plugin.getConfig().getString("worldGroups." + groupName + ".channelId");
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
 
-            //Sending the leave message to the player's old World
-            if (worldNames.contains(playerOldWorld) && !worldNames.contains(playerWorld)) {
+            //Checking which group the player's current world is
+            if (worldNames.contains(playerWorld)) {
                 try {
                     if (channelId == null) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.setAuthor(leaveMessage, null, playerAvatar);
-                    embed.setColor(Color.decode(leaveHexColor));
+                    embed.setAuthor(deathMessage, null, playerAvatar);
+                    embed.setColor(Color.decode(hexColor));
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();
                 }
             }
-
-            //Sending the join message to the player's new World
-            if (worldNames.contains(playerWorld) && !worldNames.contains(playerOldWorld)) {
-                try {
-                    if (channelId == null) return;
-                    TextChannel textChannel = jda.getTextChannelById(channelId);
-                    EmbedBuilder embed = new EmbedBuilder();
-                    embed.setAuthor(joinMessage, null, playerAvatar);
-                    embed.setColor(Color.decode(joinHexColor));
-                    textChannel.sendMessageEmbeds(embed.build()).queue();
-                } catch (Exception error) {
-                    error.printStackTrace();
-                }
-            }
-
         }
     }
+
 }

@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import plugin.discordintegrationplugin.Configurations.PluginConfig;
 
 import java.awt.*;
 import java.util.List;
@@ -21,9 +20,7 @@ public class PlayerAuthMeEvent implements Listener {
 
     public JDA jda;
     private final JavaPlugin plugin;
-    private final PluginConfig config;
     public PlayerAuthMeEvent(JavaPlugin plugin, JDA jda) {
-        this.config = new PluginConfig(plugin);
         this.plugin = plugin;
         this.jda = jda;
     }
@@ -34,12 +31,11 @@ public class PlayerAuthMeEvent implements Listener {
         Player player = event.getPlayer();
         String playerName = player.getName();
         String playerWorld = player.getWorld().getName();
-        String joinMessage = config.getString("joinMessage");
+        String joinMessage = plugin.getConfig().getString("joinMessage");
         String hexColor = "#00FF00";
 
         //Checking if the player name contains a floodgate prefix and checking the message in the config
-        if (playerName.contains("*")) playerName = playerName.replace("*","");
-        if (playerName.contains(".")) playerName = playerName.replace(".","");
+        playerName = playerName.replace("*","").replace(".","");
         if (joinMessage != null) joinMessage = joinMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
@@ -48,7 +44,7 @@ public class PlayerAuthMeEvent implements Listener {
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);
         for (String groupName : groupNames) {
-            String channelId = config.getString("worldGroups." + groupName + ".channelId");
+            String channelId = plugin.getConfig().getString("worldGroups." + groupName + ".channelId");
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
 
             //Checking which group the player's current world is
@@ -73,12 +69,11 @@ public class PlayerAuthMeEvent implements Listener {
         Player player = event.getPlayer();
         String playerName = player.getName();
         String playerWorld = player.getWorld().getName();
-        String leaveMessage = config.getString("leaveMessage");
+        String leaveMessage = plugin.getConfig().getString("leaveMessage");
         String hexColor = "#FF0000";
 
         //Checking if the player name contains a floodgate prefix and checking the message in the config
-        if (playerName.contains("*")) playerName = playerName.replace("*","");
-        if (playerName.contains(".")) playerName = playerName.replace(".","");
+        playerName = playerName.replace("*","").replace(".","");
         if (leaveMessage != null) leaveMessage = leaveMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
@@ -87,7 +82,7 @@ public class PlayerAuthMeEvent implements Listener {
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);
         for (String groupName : groupNames) {
-            String channelId = config.getString("worldGroups." + groupName + ".channelId");
+            String channelId = plugin.getConfig().getString("worldGroups." + groupName + ".channelId");
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
 
             //Checking which group the player's current world is

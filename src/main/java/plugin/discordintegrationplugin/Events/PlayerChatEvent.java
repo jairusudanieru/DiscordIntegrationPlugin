@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import plugin.discordintegrationplugin.Configurations.PluginConfig;
 import plugin.discordintegrationplugin.Discord.DiscordWebhook;
 
 import java.util.List;
@@ -19,9 +18,7 @@ public class PlayerChatEvent implements Listener {
 
     public JDA jda;
     private final JavaPlugin plugin;
-    private final PluginConfig config;
     public PlayerChatEvent(JavaPlugin plugin, JDA jda) {
-        this.config = new PluginConfig(plugin);
         this.plugin = plugin;
         this.jda = jda;
     }
@@ -35,8 +32,7 @@ public class PlayerChatEvent implements Listener {
         String playerMessage = event.getMessage();
 
         //Checking if the player name contains a floodgate prefix
-        if (playerName.contains("*")) playerName = playerName.replace("*","");
-        if (playerName.contains(".")) playerName = playerName.replace(".","");
+        playerName = playerName.replace("*","").replace(".","");
         String fullMessage = playerName + " >> " + playerMessage;
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
@@ -45,8 +41,8 @@ public class PlayerChatEvent implements Listener {
         if (worldGroups == null) return;
         Set<String> groupNames = worldGroups.getKeys(false);
         for (String groupName : groupNames) {
-            String webhookUrl = config.getString("worldGroups." + groupName + ".webhookUrl");
-            String channelId = config.getString("worldGroups." + groupName + ".channelId");
+            String webhookUrl = plugin.getConfig().getString("worldGroups." + groupName + ".webhookUrl");
+            String channelId = plugin.getConfig().getString("worldGroups." + groupName + ".channelId");
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
 
             //Checking which group the player's current world is
