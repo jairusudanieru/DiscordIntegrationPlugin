@@ -3,6 +3,8 @@ package plugin.discordintegrationplugin.Events;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,9 +31,14 @@ public class PlayerDeathsEvent implements Listener {
         //Event variables
         Player player = event.getPlayer();
         String playerName = player.getName();
-        String playerWorld = player.getWorld().getName();
+        World world = player.getWorld();
+        String playerWorld = world.getName();
         String deathMessage = event.getDeathMessage();
         String hexColor = "#000000";
+
+        //Checking if /gamerule showDeathMessage is set to false
+        boolean showDeathMessages = world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES);
+        if (!showDeathMessages) return;
 
         //Checking if the player name contains a floodgate prefix
         playerName = playerName.replace("*","").replace(".","");

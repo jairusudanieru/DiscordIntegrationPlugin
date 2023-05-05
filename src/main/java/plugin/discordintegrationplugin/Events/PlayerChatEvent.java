@@ -2,6 +2,7 @@ package plugin.discordintegrationplugin.Events;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +49,7 @@ public class PlayerChatEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (webhookUrl == null || webhookUrl.contains("webhookUrl")) {
+                    if (webhookUrl == null || webhookUrl.contains("webhookUrl") || webhookUrl.isEmpty()) {
                         if (channelId == null) return;
                         TextChannel textChannel = jda.getTextChannelById(channelId);
                         textChannel.sendMessage(fullMessage).queue();
@@ -61,6 +62,7 @@ public class PlayerChatEvent implements Listener {
                     }
                 } catch (Exception error) {
                     error.printStackTrace();
+                    Bukkit.getLogger().info("Error in ChatEvent");
                 }
             }
         }
