@@ -1,0 +1,72 @@
+package plugin.discordintegrationplugin.Events;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.TextChannel;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import plugin.discordintegrationplugin.Configurations.PluginConfig;
+import plugin.discordintegrationplugin.Discord.DiscordWebhook;
+
+import java.util.List;
+import java.util.Set;
+
+public class PlayerChatEvent implements Listener {
+
+    public JDA jda;
+    private final JavaPlugin plugin;
+    private final PluginConfig config;
+    public PlayerChatEvent(JavaPlugin plugin, JDA jda) {
+        this.config = new PluginConfig(plugin);
+        this.plugin = plugin;
+        this.jda = jda;
+    }
+
+    @EventHandler
+    public void onPlayerChat(@NotNull AsyncPlayerChatEvent event) {
+        //Event variables
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        String playerWorld = player.getWorld().getName();
+        String playerMessage = event.getMessage();
+
+        //Checking if the player name contains a floodgate prefix
+        if (playerName.contains("*")) playerName = playerName.replace("*","");
+        if (playerName.contains(".")) playerName = playerName.replace(".","");
+        String fullMessage = playerName + " >> " + playerMessage;
+        String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
+
+        //Getting the worlds, webhookUrl and channelId in the configuration
+        ConfigurationSection worldGroups = plugin.getConfig().getConfigurationSection("worldGroups");
+        if (worldGroups == null) return;
+        Set<String> groupNames = worldGroups.getKeys(false);
+        for (String groupName : groupNames) {
+            String webhookUrl = config.getString("worldGroups." + groupName + ".webhookUrl");
+            String channelId = config.getString("worldGroups." + groupName + ".channelId");
+            List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
+
+            //Checking which group the player's current world is
+            if (worldNames.contains(playerWorld)) {
+                try {
+                    if (webhookUrl == null || webhookUrl.contains("webhookUrl")) {
+                        if (channelId == null) return;
+                        TextChannel textChannel = jda.getTextChannelById(channelId);
+                        textChannel.sendMessage(fullMessage).queue();
+                    } else {
+                        DiscordWebhook webhook = new DiscordWebhook(webhookUrl);
+                        webhook.setUsername(playerName);
+                        webhook.setAvatarUrl(playerAvatar);
+                        webhook.setContent(playerMessage);
+                        webhook.execute();
+                    }
+                } catch (Exception error) {
+                    error.printStackTrace();
+                }
+            }
+        }
+    }
+}

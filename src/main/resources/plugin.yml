@@ -1,0 +1,4 @@
+name: DiscordIntegrationPlugin
+version: '${project.version}'
+main: plugin.discordintegrationplugin.DiscordIntegrationPlugin
+api-version: 1.19
