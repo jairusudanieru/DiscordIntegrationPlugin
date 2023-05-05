@@ -23,6 +23,7 @@ serverStatus:
   stopMessage: "**Server has Stopped!**"
 
 #If you have multiple worlds, and you want each world's to have their separate Discord channel
+#You can add more if you like
 worldGroups:
   group1:
     worlds:
@@ -31,15 +32,15 @@ worldGroups:
       - "world_the_end"
     channelId: "channelId"
     webhookUrl: "webhookUrl"
-  #group2:
-  #  worlds:
-  #    - "lobby"
-  #    - "hub"
-  #  channelId: "channelId"
-  #  webhookUrl: "webhookUrl"
-  #group3:
-  #  worlds:
-  #    - "arena"
-  #    - "pvp"
-  #  channelId: "channelId"
-  #  webhookUrl: "webhookUrl"
+# group2:
+#   worlds:
+#     - "lobby"
+#     - "hub"
+#   channelId: "channelId"
+#   webhookUrl: "webhookUrl"
+# group3:
+#   worlds:
+#     - "arena"
+#     - "pvp"
+#   channelId: "channelId"
+#   webhookUrl: "webhookUrl"
