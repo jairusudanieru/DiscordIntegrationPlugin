@@ -41,24 +41,26 @@ public class DiscordChat extends ListenerAdapter {
         if (roleColor == null || roleColor.isEmpty()) roleColor = "#FFFFFF";
 
         //Message that will be sent on the Minecraft Server
-        String fullMessage;
+        String fullMessage, rawMessage;
         String messageAuthorTag = authorName + " >> ";
         MessageType messageType = event.getMessage().getType();
         String messageContent = event.getMessage().getContentRaw();
         String messagePrefix = "§r[§bDiscord §r| " + of(roleColor) + roleName + "§r] ";
+        String messageRawPrefix = "[Discord | " + roleName + "] ";
+        if (messageContent.length() > 180) messageContent = messageContent.substring(0, 180) + "...";
 
         //Checking if the message have attachments
         if (haveAttachment) {
-            String attachmentName = "+ (Attachment/s)";
+            String attachmentName = " + (Attachment/s)";
             //Checking if the message have attachment but no contents
             if (!messageContent.isEmpty()) {
                 //Checking if the message is a reply to another message
                 if (messageType == MessageType.INLINE_REPLY) {
                     String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
                     String replyingTo = event.getAuthor().getAsTag() + " replying to " + repliedAuthorTag + " >> ";
-                    if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + messageContent + " " + attachmentName;
-                    else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + attachmentName;
-                } else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + attachmentName;
+                    if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + messageContent + attachmentName;
+                    else fullMessage = messagePrefix + messageAuthorTag + messageContent + attachmentName;
+                } else fullMessage = messagePrefix + messageAuthorTag + messageContent + attachmentName;
             } else {
                 if (messageType == MessageType.INLINE_REPLY) {
                     String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
@@ -67,6 +69,7 @@ public class DiscordChat extends ListenerAdapter {
                     else fullMessage = messagePrefix + messageAuthorTag + attachmentName;
                 } else fullMessage = messagePrefix + messageAuthorTag + attachmentName;
             }
+            rawMessage = messageRawPrefix + messageAuthorTag + messageContent + attachmentName;
         } else {
             if (messageType == MessageType.INLINE_REPLY) {
                 String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
@@ -74,6 +77,7 @@ public class DiscordChat extends ListenerAdapter {
                 if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + messageContent;
                 else fullMessage = messagePrefix + messageAuthorTag + messageContent;
             } else fullMessage = messagePrefix + messageAuthorTag + messageContent;
+            rawMessage = messageRawPrefix + messageAuthorTag + messageContent;
         }
 
         //Getting the worlds, webhookUrl and channelId in the configuration
@@ -85,13 +89,12 @@ public class DiscordChat extends ListenerAdapter {
 
             //Checking which group the player's current world is
             if (!currentChannel.equals(channelId)) continue;
-            if (fullMessage.length() > 200) fullMessage = fullMessage.substring(0, 200) + "...";
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 String world = player.getWorld().getName();
                 if (worldNames.contains(world)) {
                     player.sendMessage(fullMessage);
-                    Bukkit.getLogger().info(fullMessage);
+                    Bukkit.getLogger().info(rawMessage);
                 }
             }
         }

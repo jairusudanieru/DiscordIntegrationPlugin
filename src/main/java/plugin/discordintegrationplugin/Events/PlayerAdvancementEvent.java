@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,9 +34,14 @@ public class PlayerAdvancementEvent implements Listener {
     public void onAdvancement(@NotNull PlayerAdvancementDoneEvent event) {
         //Event variables
         Player player = event.getPlayer();
+        World world = player.getWorld();
         String playerName = player.getName();
-        String playerWorld = player.getWorld().getName();
+        String playerWorld = world.getName();
         String hexColor = "#FFFF00";
+
+        //Checking if /gamerule announceAdvancements is set to false
+        boolean showAdvancements = world.getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS);
+        if (!showAdvancements) return;
 
         //Checking if the player name contains a floodgate prefix and checking the message in the config
         playerName = playerName.replace("*","").replace(".","");
@@ -74,8 +81,6 @@ public class PlayerAdvancementEvent implements Listener {
                     error.printStackTrace();
                 }
             }
-            Bukkit.getLogger().info(advancement);
-            Bukkit.getLogger().info(advancementName);
         }
     }
 }
