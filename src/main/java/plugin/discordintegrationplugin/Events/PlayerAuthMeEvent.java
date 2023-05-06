@@ -36,7 +36,7 @@ public class PlayerAuthMeEvent implements Listener {
 
         //Checking if the player name contains a floodgate prefix and checking the message in the config
         playerName = playerName.replace("*","").replace(".","");
-        if (joinMessage != null) joinMessage = joinMessage.replace("%player%",playerName);
+        if (joinMessage != null ) joinMessage = joinMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
         //Getting the worlds and channelId in the configuration
@@ -50,7 +50,7 @@ public class PlayerAuthMeEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(joinMessage, null, playerAvatar);
@@ -89,7 +89,7 @@ public class PlayerAuthMeEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(leaveMessage, null, playerAvatar);

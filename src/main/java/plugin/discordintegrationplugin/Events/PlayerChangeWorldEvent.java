@@ -53,7 +53,7 @@ public class PlayerChangeWorldEvent implements Listener {
             //Sending the leave message to the player's old World
             if (worldNames.contains(playerOldWorld) && !worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(leaveMessage, null, playerAvatar);
@@ -68,7 +68,7 @@ public class PlayerChangeWorldEvent implements Listener {
             //Sending the join message to the player's new World
             if (worldNames.contains(playerWorld) && !worldNames.contains(playerOldWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(joinMessage, null, playerAvatar);

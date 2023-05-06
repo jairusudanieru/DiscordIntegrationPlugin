@@ -50,7 +50,7 @@ public class PlayerChatEvent implements Listener {
             if (worldNames.contains(playerWorld)) {
                 try {
                     if (webhookUrl == null || webhookUrl.contains("webhookUrl") || webhookUrl.isEmpty()) {
-                        if (channelId == null) return;
+                        if (channelId == null || channelId.isEmpty()) return;
                         TextChannel textChannel = jda.getTextChannelById(channelId);
                         if (textChannel == null) return;
                         textChannel.sendMessage(fullMessage).queue();

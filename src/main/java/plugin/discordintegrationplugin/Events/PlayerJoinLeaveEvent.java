@@ -57,7 +57,7 @@ public class PlayerJoinLeaveEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(joinMessage, null, playerAvatar);
@@ -101,7 +101,7 @@ public class PlayerJoinLeaveEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(leaveMessage, null, playerAvatar);

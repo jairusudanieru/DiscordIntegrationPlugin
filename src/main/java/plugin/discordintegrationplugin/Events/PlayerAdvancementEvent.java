@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -71,7 +70,7 @@ public class PlayerAdvancementEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(advancement, null, playerAvatar);

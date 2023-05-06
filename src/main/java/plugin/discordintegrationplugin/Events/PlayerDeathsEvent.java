@@ -55,7 +55,7 @@ public class PlayerDeathsEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
-                    if (channelId == null) return;
+                    if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(deathMessage, null, playerAvatar);

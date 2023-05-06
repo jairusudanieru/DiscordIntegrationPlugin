@@ -18,9 +18,9 @@ public class DiscordBot {
     public void enableBot() {
         //DiscordBot variables
         String botToken = plugin.getConfig().getString("botToken");
-        if (botToken == null || botToken.equals("botToken")) return;
+        if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
         String activityName = plugin.getConfig().getString("activityName");
-        if (activityName == null) activityName = "Minecraft";
+        if (activityName == null || activityName.isEmpty()) activityName = "Minecraft";
 
         //Enabling the bot
         try {
@@ -39,7 +39,7 @@ public class DiscordBot {
     public void disableBot() {
         //DiscordBot variables
         String botToken = plugin.getConfig().getString("botToken");
-        if (botToken == null || botToken.equals("botToken")) return;
+        if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
 
         //Disabling the bot
         try {

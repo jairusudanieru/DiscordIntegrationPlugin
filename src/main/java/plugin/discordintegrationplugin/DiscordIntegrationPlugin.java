@@ -31,8 +31,9 @@ public final class DiscordIntegrationPlugin extends JavaPlugin {
             boolean enabled = getConfig().getBoolean("serverStatus.enabled");
             String channelId = getConfig().getString("serverStatus.channelId");
             String startMessage = getConfig().getString("serverStatus.startMessage");
-            if (channelId == null || !enabled) return;
+            if (channelId == null || channelId.isEmpty() || !enabled) return;
             TextChannel textChannel = jda.getTextChannelById(channelId);
+            if (textChannel == null || startMessage == null) return;
             textChannel.sendMessage(startMessage).queue();
             Bukkit.getLogger().info("[Discord-Integration] Plugin has successfully enabled!");
         } catch (Exception error) {
@@ -47,8 +48,9 @@ public final class DiscordIntegrationPlugin extends JavaPlugin {
             boolean enabled = getConfig().getBoolean("serverStatus.enabled");
             String channelId = getConfig().getString("serverStatus.channelId");
             String stopMessage = getConfig().getString("serverStatus.stopMessage");
-            if (channelId == null || !enabled) return;
+            if (channelId == null || channelId.isEmpty() || !enabled) return;
             TextChannel textChannel = jda.getTextChannelById(channelId);
+            if (textChannel == null || stopMessage == null) return;
             textChannel.sendMessage(stopMessage).queue();
             Bukkit.getLogger().info("[Discord-Integration] Plugin has successfully disabled!");
         } catch (Exception error) {
@@ -62,7 +64,7 @@ public final class DiscordIntegrationPlugin extends JavaPlugin {
         saveDefaultConfig();
         this.discordBot = new DiscordBot(this);
         String botToken = getConfig().getString("botToken");
-        if (botToken == null || botToken.equals("botToken")) return;
+        if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
         discordBot.enableBot();
         registerEvents();
         statusStart();
@@ -72,7 +74,7 @@ public final class DiscordIntegrationPlugin extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         String botToken = getConfig().getString("botToken");
-        if (botToken == null || botToken.equals("botToken")) return;
+        if (botToken == null || botToken.equals("botToken") || botToken.isEmpty()) return;
         statusStop();
         discordBot.disableBot();
     }
