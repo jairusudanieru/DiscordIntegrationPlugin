@@ -9,6 +9,12 @@ botToken: "botToken"
 #Example: Playing Minecraft
 activityName: "Minecraft"
 
+#The role name and color in your Discord server
+#Can be anything you like
+#Don't forget to add # in the hex color
+roleName: "Minecraft Player"
+roleHex: "#F2CD74"
+
 #Player join/leave message
 #This is only sent in the Discord Server
 #This is also different in the InGame join/leave message

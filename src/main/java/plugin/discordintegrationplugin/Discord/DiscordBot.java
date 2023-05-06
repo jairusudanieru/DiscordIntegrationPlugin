@@ -26,6 +26,7 @@ public class DiscordBot {
         try {
             this.jda = JDABuilder.createDefault(botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS)
                     .setActivity(Activity.playing(activityName))
+                    .addEventListeners(new DiscordChat(plugin))
                     .build();
             this.jda.awaitReady();
             this.setJDA(jda);
