@@ -45,14 +45,10 @@ public class DiscordChat extends ListenerAdapter {
         String messagePrefix = "§r[§bDiscord§b | " + of(roleColor) + roleName + "§r] ";
         String fullMessage = messagePrefix + messageAuthorTag + messageContent;
 
-        //Checking if the message have attachment/s, if yes get the attachment/s name
+        //Checking if the message have attachment/s
         if (haveAttachment) {
-            List<Message.Attachment> attachmentsList = event.getMessage().getAttachments();
-            for (Message.Attachment attachment : attachmentsList) {
-                String attachmentName = attachment.getFileName();
-                if (messageContent.isEmpty()) fullMessage = messagePrefix + messageAuthorTag + attachmentName;
-                else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + attachmentName;
-            }
+            if (messageContent.isEmpty()) fullMessage = messagePrefix + messageAuthorTag + "[Attachment/s]";
+            else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + "[Attachment/s]";
         }
 
         //Getting the worlds, webhookUrl and channelId in the configuration
