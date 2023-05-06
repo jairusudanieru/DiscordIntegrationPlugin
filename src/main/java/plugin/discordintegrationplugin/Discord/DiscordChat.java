@@ -1,6 +1,7 @@
 package plugin.discordintegrationplugin.Discord;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import static net.md_5.bungee.api.ChatColor.of;
@@ -40,15 +41,39 @@ public class DiscordChat extends ListenerAdapter {
         if (roleColor == null || roleColor.isEmpty()) roleColor = "#FFFFFF";
 
         //Message that will be sent on the Minecraft Server
-        String messageContent = event.getMessage().getContentRaw();
+        String fullMessage;
         String messageAuthorTag = authorName + " >> ";
-        String messagePrefix = "§r[§bDiscord§b | " + of(roleColor) + roleName + "§r] ";
-        String fullMessage = messagePrefix + messageAuthorTag + messageContent;
+        MessageType messageType = event.getMessage().getType();
+        String messageContent = event.getMessage().getContentRaw();
+        String messagePrefix = "§r[§bDiscord §r| " + of(roleColor) + roleName + "§r] ";
 
-        //Checking if the message have attachment/s
+        //Checking if the message have attachments
         if (haveAttachment) {
-            if (messageContent.isEmpty()) fullMessage = messagePrefix + messageAuthorTag + "[Attachment/s]";
-            else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + "[Attachment/s]";
+            String attachmentName = "§r[§battachment/s§r]";
+            //Checking if the message have attachment but no contents
+            if (!messageContent.isEmpty()) {
+                //Checking if the message is a reply to another message
+                if (messageType == MessageType.INLINE_REPLY) {
+                    String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
+                    String replyingTo = event.getAuthor().getAsTag() + " replying to " + repliedAuthorTag + " >> ";
+                    if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + messageContent + " " + attachmentName;
+                    else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + attachmentName;
+                } else fullMessage = messagePrefix + messageAuthorTag + messageContent + " " + attachmentName;
+            } else {
+                if (messageType == MessageType.INLINE_REPLY) {
+                    String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
+                    String replyingTo = event.getAuthor().getAsTag() + " replying to " + repliedAuthorTag + " >> ";
+                    if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + attachmentName;
+                    else fullMessage = messagePrefix + messageAuthorTag + attachmentName;
+                } else fullMessage = messagePrefix + messageAuthorTag + attachmentName;
+            }
+        } else {
+            if (messageType == MessageType.INLINE_REPLY) {
+                String repliedAuthorTag = event.getMessage().getReferencedMessage().getAuthor().getAsTag();
+                String replyingTo = event.getAuthor().getAsTag() + " replying to " + repliedAuthorTag + " >> ";
+                if (!repliedAuthorTag.equals(messageAuthorTag)) fullMessage = messagePrefix + replyingTo + messageContent;
+                else fullMessage = messagePrefix + messageAuthorTag + messageContent;
+            } else fullMessage = messagePrefix + messageAuthorTag + messageContent;
         }
 
         //Getting the worlds, webhookUrl and channelId in the configuration
@@ -60,6 +85,7 @@ public class DiscordChat extends ListenerAdapter {
 
             //Checking which group the player's current world is
             if (!currentChannel.equals(channelId)) continue;
+            if (fullMessage.length() > 200) fullMessage = fullMessage.substring(0, 200) + "...";
             List<String> worldNames = worldGroups.getStringList(groupName + ".worlds");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 String world = player.getWorld().getName();
