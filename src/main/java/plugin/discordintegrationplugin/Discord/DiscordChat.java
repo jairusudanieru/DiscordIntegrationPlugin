@@ -49,7 +49,7 @@ public class DiscordChat extends ListenerAdapter {
 
         //Checking if the message have attachments
         if (haveAttachment) {
-            String attachmentName = "§r[§battachment/s§r]";
+            String attachmentName = "+ (Attachment/s)";
             //Checking if the message have attachment but no contents
             if (!messageContent.isEmpty()) {
                 //Checking if the message is a reply to another message
