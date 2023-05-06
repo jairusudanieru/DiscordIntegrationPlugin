@@ -58,6 +58,7 @@ public class PlayerChangeWorldEvent implements Listener {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(leaveMessage, null, playerAvatar);
                     embed.setColor(Color.decode(leaveHexColor));
+                    if (textChannel == null) return;
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();
@@ -72,6 +73,7 @@ public class PlayerChangeWorldEvent implements Listener {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(joinMessage, null, playerAvatar);
                     embed.setColor(Color.decode(joinHexColor));
+                    if (textChannel == null) return;
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();

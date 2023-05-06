@@ -60,6 +60,7 @@ public class PlayerDeathsEvent implements Listener {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(deathMessage, null, playerAvatar);
                     embed.setColor(Color.decode(hexColor));
+                    if (textChannel == null) return;
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();

@@ -62,6 +62,7 @@ public class PlayerJoinLeaveEvent implements Listener {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(joinMessage, null, playerAvatar);
                     embed.setColor(Color.decode(hexColor));
+                    if (textChannel == null) return;
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();
@@ -105,6 +106,7 @@ public class PlayerJoinLeaveEvent implements Listener {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setAuthor(leaveMessage, null, playerAvatar);
                     embed.setColor(Color.decode(hexColor));
+                    if (textChannel == null) return;
                     textChannel.sendMessageEmbeds(embed.build()).queue();
                 } catch (Exception error) {
                     error.printStackTrace();

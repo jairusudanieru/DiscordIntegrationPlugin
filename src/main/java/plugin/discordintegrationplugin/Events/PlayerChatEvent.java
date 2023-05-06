@@ -52,6 +52,7 @@ public class PlayerChatEvent implements Listener {
                     if (webhookUrl == null || webhookUrl.contains("webhookUrl") || webhookUrl.isEmpty()) {
                         if (channelId == null) return;
                         TextChannel textChannel = jda.getTextChannelById(channelId);
+                        if (textChannel == null) return;
                         textChannel.sendMessage(fullMessage).queue();
                     } else {
                         DiscordWebhook webhook = new DiscordWebhook(webhookUrl);
