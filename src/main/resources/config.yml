@@ -18,8 +18,10 @@ roleHex: "#F2CD74"
 #Player join/leave message
 #This is only sent in the Discord Server
 #This is also different in the InGame join/leave message
+#The newJoinMessage is for new players joining
 joinMessage: "%player% joined the Server"
 leaveMessage: "%player% left the Server"
+newJoinMessage: "%player% joined the Server for the First Time!"
 
 #Enable server status to send a message to the channel whenever the server start/stops
 serverStatus:

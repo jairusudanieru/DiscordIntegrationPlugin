@@ -32,11 +32,18 @@ public class PlayerAuthMeEvent implements Listener {
         String playerName = player.getName();
         String playerWorld = player.getWorld().getName();
         String joinMessage = plugin.getConfig().getString("joinMessage");
+        String newPlayerJoin = plugin.getConfig().getString("newJoinMessage");
+        boolean hasJoinedBefore = player.hasPlayedBefore();
         String hexColor = "#00FF00";
+
+        //Checking if the message is null and if the player has joined before
+        if ((joinMessage == null || joinMessage.isEmpty()) && hasJoinedBefore) return;
+        if ((newPlayerJoin == null || newPlayerJoin.isEmpty()) && !hasJoinedBefore) return;
 
         //Checking if the player name contains a floodgate prefix and checking the message in the config
         playerName = playerName.replace("*","").replace(".","");
-        if (joinMessage != null ) joinMessage = joinMessage.replace("%player%",playerName);
+        if (joinMessage != null) joinMessage = joinMessage.replace("%player%",playerName);
+        if (newPlayerJoin != null) newPlayerJoin = newPlayerJoin.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
         //Getting the worlds and channelId in the configuration
@@ -50,6 +57,7 @@ public class PlayerAuthMeEvent implements Listener {
             //Checking which group the player's current world is
             if (worldNames.contains(playerWorld)) {
                 try {
+                    if (!player.hasPlayedBefore()) { joinMessage = newPlayerJoin; hexColor = "#FFFF00"; }
                     if (channelId == null || channelId.isEmpty()) return;
                     TextChannel textChannel = jda.getTextChannelById(channelId);
                     EmbedBuilder embed = new EmbedBuilder();
@@ -73,9 +81,12 @@ public class PlayerAuthMeEvent implements Listener {
         String leaveMessage = plugin.getConfig().getString("leaveMessage");
         String hexColor = "#FF0000";
 
+        //Checking if the message is null and if the player has joined before
+        if (leaveMessage == null || leaveMessage.isEmpty()) return;
+
         //Checking if the player name contains a floodgate prefix and checking the message in the config
         playerName = playerName.replace("*","").replace(".","");
-        if (leaveMessage != null) leaveMessage = leaveMessage.replace("%player%",playerName);
+        leaveMessage = leaveMessage.replace("%player%",playerName);
         String playerAvatar = "https://cravatar.eu/helmavatar/"+playerName+"/64.png";
 
         //Getting the worlds, webhookUrl and channelId in the configuration
