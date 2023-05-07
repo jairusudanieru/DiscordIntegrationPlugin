@@ -66,18 +66,17 @@ public class DiscordChat extends ListenerAdapter {
                         player.sendMessage(fullMessage);
                         Bukkit.getLogger().info(rawMessage);
                     } else {
+                        if (!chatContent.isEmpty()) {
+                            player.sendMessage(fullMessage);
+                            Bukkit.getLogger().info(rawMessage);
+                        }
                         //Checking if the message have attachments
                         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
                             String attachmentName = attachment.getFileName();
-                            if (chatContent.isEmpty()) {
-                                fullMessage = chatPrefix + chatAuthorTag + attachmentName;
-                                rawMessage = chatRawPrefix + chatAuthorTag + attachmentName;
-                            } else {
-                                fullMessage = chatPrefix + chatAuthorTag + chatContent + " " + attachmentName;
-                                rawMessage = chatRawPrefix + chatAuthorTag + chatContent + " " + attachmentName;
-                            }
-                            player.sendMessage(fullMessage);
-                            Bukkit.getLogger().info(rawMessage);
+                            String attachmentMessage = chatPrefix + chatAuthorTag + attachmentName;
+                            String attachmentRawMessage = chatRawPrefix + chatAuthorTag + attachmentName;
+                            player.sendMessage(attachmentMessage);
+                            Bukkit.getLogger().info(attachmentRawMessage);
                         }
                     }
                 }
